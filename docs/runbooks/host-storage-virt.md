@@ -307,28 +307,28 @@ Expect: four `event=TestMessage` lines; `Monitoring 6 ATA/SATA`.
 
 ## 4. Validation
 
-Fill in on the build day and again on the cold run.
+Build column recorded 2026-11-16: all 18 checks passed with the expected results. Fill in the cold-run column after the gap, from this runbook alone.
 
 | # | Check | Command | Pass | Build result / date | Cold-run result / date |
 |---|---|---|---|---|---|
-| 1 | Arrays healthy | `cat /proc/mdstat` | four arrays, all `U`, no progress line | | |
-| 2 | HDD array policy | `sudo mdadm --detail /dev/md/hdd \| grep -E 'State \|Policy'` | `clean`, `ppl` | | |
-| 3 | Array recorded | `grep -c '^ARRAY' /etc/mdadm.conf` | `4` | | |
-| 4 | Mounts | `df -hT /srv/backups /srv/bulk /var/lib/libvirt/isos` | three `hdd--vg-*` | | |
-| 5 | fstab | `sudo findmnt --verify` | no errors | | |
-| 6 | Repo | `sudo dnf clean all && sudo dnf repolist -v \| grep -E 'Repo-id\|Repo-pkgs'` | two repos, counts > 0 | | |
-| 7 | Pool and reserve | `sudo lvs ssd-vg; sudo vgs ssd-vg` | `vmpool`; `VFree` about 180g | | |
-| 8 | Thin volume | section 5.1 below, create and remove `vm-scratch` | works | | |
-| 9 | Acceleration | `virt-host-validate qemu \| head -3` | three `PASS` | | |
-| 10 | libvirt layout | `systemctl is-active libvirtd.service virtqemud.socket` | `inactive`, `active` | | |
-| 11 | virsh | `virsh uri; virsh pool-list --all` | `qemu:///system`; `isos active yes` | | |
-| 12 | Timeouts | loop in 3.7 | three × `180` | | |
-| 13 | Scrub | section 5.5 below | `mismatch_cnt` = `0` | | |
-| 14 | Scrub timer | `systemctl is-enabled raid-check.timer` | `enabled` | | |
-| 15 | RAID alerts | `sudo mdadm --monitor --scan --test --oneshot; journalctl -t disk-alert --since "-2 min"` | four TestMessage lines | | |
-| 16 | SMART daemon | `journalctl -u smartd -b \| grep Monitoring` | 6 devices | | |
-| 17 | Disk health | section 5.7 below | six `PASSED`, raw counts 0 | | |
-| 18 | Reboot | reboot; repeat 1, 4, 6, 11, 12 | all pass | | |
+| 1 | Arrays healthy | `cat /proc/mdstat` | four arrays, all `U`, no progress line | PASS 2026-11-16 — 4 arrays, all U | |
+| 2 | HDD array policy | `sudo mdadm --detail /dev/md/hdd \| grep -E 'State \|Policy'` | `clean`, `ppl` | PASS 2026-11-16 — clean, ppl | |
+| 3 | Array recorded | `grep -c '^ARRAY' /etc/mdadm.conf` | `4` | PASS 2026-11-16 — 4 | |
+| 4 | Mounts | `df -hT /srv/backups /srv/bulk /var/lib/libvirt/isos` | three `hdd--vg-*` | PASS 2026-11-16 — 3 × hdd--vg | |
+| 5 | fstab | `sudo findmnt --verify` | no errors | PASS 2026-11-16 — no errors | |
+| 6 | Repo | `sudo dnf clean all && sudo dnf repolist -v \| grep -E 'Repo-id\|Repo-pkgs'` | two repos, counts > 0 | PASS 2026-11-16 — 2 repos | |
+| 7 | Pool and reserve | `sudo lvs ssd-vg; sudo vgs ssd-vg` | `vmpool`; `VFree` about 180g | PASS 2026-11-16 — vmpool present | |
+| 8 | Thin volume | section 5.1 below, create and remove `vm-scratch` | works | PASS 2026-11-16 | |
+| 9 | Acceleration | `virt-host-validate qemu \| head -3` | three `PASS` | PASS 2026-11-16 — 3 × PASS | |
+| 10 | libvirt layout | `systemctl is-active libvirtd.service virtqemud.socket` | `inactive`, `active` | PASS 2026-11-16 — inactive / active | |
+| 11 | virsh | `virsh uri; virsh pool-list --all` | `qemu:///system`; `isos active yes` | PASS 2026-11-16 — qemu:///system; isos active yes | |
+| 12 | Timeouts | loop in 3.7 | three × `180` | PASS 2026-11-16 — 180/180/180 | |
+| 13 | Scrub | section 5.5 below | `mismatch_cnt` = `0` | PASS 2026-11-16 — 0 | |
+| 14 | Scrub timer | `systemctl is-enabled raid-check.timer` | `enabled` | PASS 2026-11-16 — enabled | |
+| 15 | RAID alerts | `sudo mdadm --monitor --scan --test --oneshot; journalctl -t disk-alert --since "-2 min"` | four TestMessage lines | PASS 2026-11-16 — 4 TestMessage | |
+| 16 | SMART daemon | `journalctl -u smartd -b \| grep Monitoring` | 6 devices | PASS 2026-11-16 — 6 devices | |
+| 17 | Disk health | section 5.7 below | six `PASSED`, raw counts 0 | PASS 2026-11-16 — 6 PASSED, raw 0 | |
+| 18 | Reboot | reboot; repeat 1, 4, 6, 11, 12 | all pass | PASS 2026-11-16 | |
 
 ## 5. Common operations
 
